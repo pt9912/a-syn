@@ -308,7 +308,8 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     container:
-      image: debian:trixie
+      image: mcr.microsoft.com/devcontainers/base:debian
+      options: --user root
 
     steps:
     - uses: actions/checkout@v4
@@ -317,8 +318,13 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install -y \
+        apt-get update
+        apt-get install -y \
+          build-essential \
+          curl \
+          git \
+          pkg-config \
+          ninja-build \
           libasound2-dev \
           libjack-jackd2-dev \
           libfreetype6-dev \
@@ -326,6 +332,8 @@ jobs:
           libxrandr-dev \
           libxinerama-dev \
           libxcursor-dev \
+          libgtk-3-dev \
+          libwebkit2gtk-4.1-dev \
           lv2-dev
 
     - name: Install CMake 4.1.2
