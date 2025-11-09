@@ -346,7 +346,7 @@ jobs:
       run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DJUCE_CLAP_SDK_DIR=external/clap/include -DJUCE_LV2_SDK_DIR=external/lv2
 
     - name: Build
-      run: cmake --build build --config Release --target AnalogSynth_Standalone AnalogSynth_VST3 AnalogSynth_CLAP AnalogSynth_LV2
+      run: cmake --build build --config Release --target AnalogSynth_Standalone AnalogSynth_VST3 AnalogSynth_CLAP AnalogSynth_LV2 AnalogSynthTests
 
     - name: Run Tests
       run: cd build && ctest --output-on-failure
