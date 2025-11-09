@@ -10,7 +10,8 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     container:
-      image: debian:trixie
+      image: mcr.microsoft.com/devcontainers/base:debian
+      options: --user root
 
     steps:
     - uses: actions/checkout@v4
