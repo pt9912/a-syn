@@ -1,0 +1,29 @@
+# Build-Verzeichnisse
+build/
+cmake-build-*/
+.ccache/
+
+# IDE
+.vscode/
+.idea/
+*.user
+*.swp
+*.swo
+*~
+
+# Binaries
+*.o
+*.so
+*.a
+*.dylib
+*.exe
+
+# JUCE-spezifisch
+JuceLibraryCode/
+Builds/
+
+# macOS
+.DS_Store
+
+# Submodules (werden via git submodule verwaltet)
+!external/.gitkeep

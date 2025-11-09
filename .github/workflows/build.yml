@@ -1,0 +1,59 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    container:
+      image: debian:trixie
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install Dependencies
+      run: |
+        apt-get update
+        apt-get install -y \
+          build-essential \
+          curl \
+          git \
+          libasound2-dev \
+          libjack-jackd2-dev \
+          libfreetype6-dev \
+          libx11-dev \
+          libxrandr-dev \
+          libxinerama-dev \
+          libxcursor-dev \
+          lv2-dev
+
+    - name: Install CMake 4.1.2
+      run: |
+        curl -LO https://github.com/Kitware/CMake/releases/download/v4.1.2/cmake-4.1.2-linux-x86_64.sh
+        chmod +x cmake-4.1.2-linux-x86_64.sh
+        ./cmake-4.1.2-linux-x86_64.sh --skip-license --prefix=/usr/local
+
+    - name: Configure CMake
+      run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DJUCE_CLAP_SDK_DIR=external/clap/include -DJUCE_LV2_SDK_DIR=external/lv2
+
+    - name: Build
+      run: cmake --build build --config Release --target AnalogSynth_Standalone AnalogSynth_VST3 AnalogSynth_CLAP AnalogSynth_LV2
+
+    - name: Run Tests
+      run: cd build && ctest --output-on-failure
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: AnalogSynth-Linux
+        path: |
+          build/AnalogSynth_artefacts/Release/Standalone/
+          build/AnalogSynth_artefacts/Release/VST3/
+          build/AnalogSynth_artefacts/Release/CLAP/
+          build/AnalogSynth_artefacts/Release/LV2/
